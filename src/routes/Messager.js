@@ -11,11 +11,12 @@ module.exports = async (app, option, next) => {
     app.jwt.verify(token);
   }
   const dbName = config.dbName;
-  const client = new line.Client(configLine);
   const configLine = {
     channelAccessToken: config.channelAccessToken,
     channelSecret: config.channelSecret,
   };
+  const client = new line.Client(configLine);
+  
   
   app.register(fastifyJwt, { secret: `${config.secret}` });
 

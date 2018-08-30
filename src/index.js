@@ -4,7 +4,6 @@ import config from './config';
 import { MongoClient } from 'mongodb';
 import fastify from 'fastify';
 import fastifyMongo from 'fastify-mongodb';
-import fastifyJwt from 'fastify-jwt';
 import Messager from './routes/Messager';
 
 const port = config.port;
