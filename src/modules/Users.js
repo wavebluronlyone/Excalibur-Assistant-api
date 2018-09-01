@@ -3,7 +3,7 @@ import config from '../config';
 
 const dbName = config.dbName;
 
-export const getProfile = async (client, userId, app) => {
+export const saveUserData = async (client, userId, app) => {
     try {
       const profile = await client.getProfile(userId);
       await update(app, dbName, 'Users', { userId }, { upsert: true }, profile);

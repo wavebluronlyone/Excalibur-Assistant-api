@@ -22,11 +22,11 @@ const mongoUrl = `mongodb://${dbuser}:${dbpass}@ds123532.mlab.com:23532/heroku_c
 const dbName = 'heroku_c5rxsb5d';
 
 export default {
-    port,
-    channelAccessToken,
-    channelSecret,
-    mongoUrl,
-    lineUrl,
-    dbName,
-    secret,
+  port,
+  channelAccessToken,
+  channelSecret,
+  mongoUrl,
+  lineUrl,
+  dbName,
+  secret,
 }
