@@ -34,10 +34,7 @@ export const update = async (app, dbname, collectionName, filter = {}, option = 
     }
     try {
       const result = await col.update(filter, updateData, option);
-      
       await col.update(filter, updatedate, option) 
-
-
       return result;
     } catch (error) {
       throw error;   

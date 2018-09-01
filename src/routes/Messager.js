@@ -33,24 +33,7 @@ module.exports = async (app, option, next) => {
     const incomingMessage = data.message;
     let receiveMessage = incomingMessage;
     console.log(`Receive Message from UserID: ${userId}`);
-    switch (incomingMessage.type) {
-      case 'text' : {
-        console.log('type : text');
-        console.log(`"${incomingMessage.text}"`);
-        break;
-      }
-      case 'sticker' : {
-        console.log('type : sticker');
-        console.log(`Stciker ID: ${incomingMessage.stickerId}`);
-        console.log(`Package ID: ${incomingMessage.packageId}`);
-        break;
-      }
-      default: {
-        console.log('unknown type');
-        receiveMessage = null;
-        break;
-      }
-    };
+    console.log(`Content: ${JSON.stringify(incomingMessage)}`);
     const logData = {
         userId,
         receiveMessage,
@@ -73,6 +56,7 @@ module.exports = async (app, option, next) => {
     } catch (error) {
       console.log(error);
     }
+
     reply.status(200).send({ repsoneMessage : 'receive message' });
   });
 

@@ -29,7 +29,6 @@ class Session {
     } catch (error) {
       throw error.stack
     }
-    
   }
 
   async getWorkflowIdByKeyword(app ,keyword) {
@@ -47,22 +46,29 @@ class Session {
     } catch (error) {
       throw error.stack
     }
-
   }
 
   async startWorkflow(app , userId, workflowId) {
     const filter = {
       userId
     };
-
-    const workflow = {
+    
+    let sessionData = {};
+    const workflow = await this.getWorkflow(app, workflowId);
+    workflow.states.length <= 1 ? sessionData = {
+      userId,
+      workflowId,
+      currentState: 'end',
+      status: 'finish',
+    } : sessionData = {
       userId,
       workflowId,
       currentState: 'start',
       status: 'pending',
     }
+
     try {
-      await update(app,config.dbName,'Sessions', filter, { upsert : true }, workflow);
+      await update(app,config.dbName,'Sessions', filter, { upsert : true }, sessionData);
     } catch (error) {
       throw error.stack;
     }
@@ -79,9 +85,11 @@ class Session {
     
     const raw_currentState = Session.currentState;
     const currentState = workflow.states.filter(state => (state.state_name === raw_currentState));
+    const nextStateName = currentState[0].next_state;
+    const nextState = workflow.states.filter(state => (state.state_name === nextStateName)); 
     let updateSessionData = {};
     
-    if(currentState.next_state) {
+    if(nextState[0].state_type !== 'end' ) {
       updateSessionData = {
         $set: {
           currentState : currentState[0].next_state,
@@ -112,12 +120,8 @@ class Session {
       channelAccessToken: config.channelAccessToken,
       channelSecret: config.channelSecret,
     };
-
     const contents = workflow.states.filter(state => currentState === state.state_name);
     const client = new line.Client(configLine);
-
-    
-    
     try {
       contents.forEach(async (content) => {
         const logData = {
@@ -126,16 +130,13 @@ class Session {
         };
         await client.pushMessage(userId, content.reply_content);
         await create(app, config.dbName, 'Logs', logData);
-        console.log('reply content to : ',userId);
-        console.log('content :', content.reply_content);
+        console.log('Reply to: ',userId);
+        console.log('Content:', content.reply_content);
       });
     } catch (error) {
       throw error.stack;
     }
-    
   }
-
-
 }
 
 export default new Session();
