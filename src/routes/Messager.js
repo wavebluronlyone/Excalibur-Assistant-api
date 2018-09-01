@@ -3,6 +3,7 @@ import config from '../config';
 import { create, find } from '../utils/mongodb';
 import { saveUserData } from '../modules/Users';
 import fastifyJwt from 'fastify-jwt';
+import SessionManager from '../modules/SessionManager';
 
 module.exports = async (app, option, next) => {
   function verifyToken(req, reply) {
@@ -57,10 +58,21 @@ module.exports = async (app, option, next) => {
     try {
       await create(app, dbName, 'Logs', logData);
       await saveUserData(client, userId, app);
+      const currentStateWorkflow = await SessionManager.currentStateWorkflow(app, userId);
+      if( currentStateWorkflow !== undefined && currentStateWorkflow.status !== 'finish' ) {
+        await SessionManager.nextStateWorkflow(app, userId);
+        await SessionManager.sendState(app, userId);
+      } else {
+        const keyword = incomingMessage.text;
+        const worlflowid = await SessionManager.getWorkflowIdByKeyword(app, keyword);
+        if(worlflowid !== undefined){
+          await SessionManager.startWorkflow(app, userId, worlflowid);
+          await SessionManager.sendState(app, userId);
+        }
+      }
     } catch (error) {
-      console.log(error.stack);
+      console.log(error);
     }
-
     reply.status(200).send({ repsoneMessage : 'receive message' });
   });
 

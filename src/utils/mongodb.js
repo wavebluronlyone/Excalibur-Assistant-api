@@ -26,7 +26,6 @@ export const update = async (app, dbname, collectionName, filter = {}, option = 
     const rawData = data;
     const updateData = {
       ...rawData,
-      update_at: now,
     };
     try {
       const result = await col.update(filter, updateData, option);
