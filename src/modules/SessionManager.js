@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import config from '../config';
 import * as line from '@line/bot-sdk';
 
-class Session {
+class SessionAndMessageEngine {
   async currentStateWorkflow(app, userId) {
     const filter = {
       userId,
@@ -139,4 +139,4 @@ class Session {
   }
 }
 
-export default new Session();
+export default new SessionAndMessageEngine();
