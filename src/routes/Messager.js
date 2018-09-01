@@ -28,7 +28,7 @@ module.exports = async (app, option, next) => {
   app.register(fastifyJwt, { secret: `${config.secret}`});
 
   app.post('/api/messenger/receive/', async (req,reply) =>{
-    const data =  req.body;
+    const { data } =  req.body;
     const userId = data.source.userId;
     const incomingMessage = data.message;
     let receiveMessage = incomingMessage;
