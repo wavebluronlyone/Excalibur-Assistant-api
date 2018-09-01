@@ -27,8 +27,17 @@ export const update = async (app, dbname, collectionName, filter = {}, option = 
     const updateData = {
       ...rawData,
     };
+    const updatedate = {
+      $set: {
+        update_at : now,
+      }
+    }
     try {
       const result = await col.update(filter, updateData, option);
+      
+      await col.update(filter, updatedate, option) 
+
+
       return result;
     } catch (error) {
       throw error;   

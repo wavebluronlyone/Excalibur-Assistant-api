@@ -1,4 +1,4 @@
-import { find, update } from '../utils/mongodb';
+import { find, update, create } from '../utils/mongodb';
 import { ObjectId } from 'mongodb';
 import config from '../config';
 import * as line from '@line/bot-sdk';
@@ -115,9 +115,19 @@ class Session {
 
     const contents = workflow.states.filter(state => currentState === state.state_name);
     const client = new line.Client(configLine);
+
+    
+    
     try {
       contents.forEach(async (content) => {
+        const logData = {
+          userId,
+          replyMessage: content.reply_content,
+        };
         await client.pushMessage(userId, content.reply_content);
+        await create(app, config.dbName, 'Logs', logData);
+        console.log('reply content to : ',userId);
+        console.log('content :', content.reply_content);
       });
     } catch (error) {
       throw error.stack;
