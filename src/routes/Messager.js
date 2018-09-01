@@ -68,6 +68,9 @@ module.exports = async (app, option, next) => {
     verifyToken(req, reply);
     const replyContent = req.body.replycontent;
     const userId = req.query.userid;
+    if(typeof userId === 'undefined' || userId === '') {
+      return reply.status(400).send('require userid');
+    }
     console.log('to : ',userId);
     console.log(replyContent);
     const logData = {
