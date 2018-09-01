@@ -10,8 +10,7 @@
     "build": "babel src -d dist && node dist/index.js"
   },
   "engines": {
-    "node": "10.5.0",
-    "npm": "6.1.0"
+    "node": "10.5.0"
   },
   "repository": {
     "type": "git",
