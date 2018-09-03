@@ -4,7 +4,7 @@ import config from '../config';
 import * as line from '@line/bot-sdk';
 
 class SessionAndMessageEngine {
-  async currentStateWorkflow(app, userId) {
+  async currentSession(app, userId) {
     const filter = {
       userId,
     };
@@ -16,7 +16,7 @@ class SessionAndMessageEngine {
     }
   }
 
-  async getWorkflow(app ,workflowId) {
+  async getWorkflowById(app ,workflowId) {
     const filter = {
       _id : ObjectId(workflowId)
     }
@@ -31,7 +31,7 @@ class SessionAndMessageEngine {
     }
   }
 
-  async getWorkflowIdByKeyword(app ,keyword) {
+  async getWorkflowByKeyword(app ,keyword) {
     const search = new RegExp(`${keyword}`);
     const filter = {
       "start_keywords": search
@@ -41,7 +41,7 @@ class SessionAndMessageEngine {
       if(workflow[0] === undefined) {
         return;
       }
-      return workflow[0]._id;
+      return workflow[0];
 
     } catch (error) {
       throw error.stack
@@ -54,7 +54,7 @@ class SessionAndMessageEngine {
     };
     
     let sessionData = {};
-    const workflow = await this.getWorkflow(app, workflowId);
+    const workflow = await this.getWorkflowById(app, workflowId);
     workflow.states.length <= 1 ? sessionData = {
       userId,
       workflowId,
@@ -75,10 +75,10 @@ class SessionAndMessageEngine {
   }
 
   async nextStateWorkflow(app, userId) {
-    const Session = await this.currentStateWorkflow(app, userId);
+    const Session = await this.currentSession(app, userId);
     let workflow;
     if (Session) {
-      workflow = await this.getWorkflow(app, Session.workflowId)
+      workflow = await this.getWorkflowById(app, Session.workflowId)
     } else {
       return;
     }
@@ -91,17 +91,13 @@ class SessionAndMessageEngine {
     
     if(nextState[0].state_type !== 'end' ) {
       updateSessionData = {
-        $set: {
           currentState : currentState[0].next_state,
           status: 'pending',
-        } 
       }
     } else {
       updateSessionData = {
-        $set: {
           currentState : 'end',
           status: 'finish',
-        } 
       }
     }
     try {
@@ -113,9 +109,9 @@ class SessionAndMessageEngine {
   }
 
   async sendState(app, userId) {
-    const Session = await this.currentStateWorkflow(app, userId);
+    const Session = await this.currentSession(app, userId);
     const currentState = Session.currentState;
-    const workflow = await this.getWorkflow(app, Session.workflowId);
+    const workflow = await this.getWorkflowById(app, Session.workflowId);
     const configLine = {
       channelAccessToken: config.channelAccessToken,
       channelSecret: config.channelSecret,
@@ -137,6 +133,39 @@ class SessionAndMessageEngine {
       throw error.stack;
     }
   }
+
+//   async isStateSaveContent(app, userId) {
+//     let result = false;
+//     const userSession = await this.currentSession(app, userId);
+//     const currentState = userSession.currentState;
+//     const workflow = await this.getWorkflowById(app, userSession.workflowId);
+//     const state = workflow.states.filter(state => currentState === state.state_name);
+
+//     if (state.save_input !== true) {
+//       result = false;
+//     } else {
+//       result = true;
+//     }
+
+//     return result;
+//   }
+
+//   async saveInputData(app, userId, inputContent) {
+//     const userSession = await this.currentSession(app, userId);
+//     const currentState = userSession.currentState;
+//     const workflow = await this.getWorkflowById(app, userSession.workflowId);
+//     const state = workflow.states.filter(state => currentState === state.state_name);
+
+//     const inputValue = inputContent.text;
+    
+//     const data = {
+//       field_input_name: state.field_input_name,
+//       field_value: inputValue,
+//     }
+
+    
+
+  // }
 }
 
 export default new SessionAndMessageEngine();
