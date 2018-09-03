@@ -26,7 +26,7 @@ export const update = async (app, dbname, collectionName, filter = {}, option = 
     const now = new Date();
     const rawData = data;
     const updateData = {
-      ...rawData,
+       $set : {...rawData },
     };
     const updatedate = {
       $set: {
