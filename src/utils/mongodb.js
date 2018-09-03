@@ -11,6 +11,7 @@ export const create = async (app, dbname, collectionName, data) => {
     const insertData = {
       ...rawData,
       create_at: now,
+      update_at: now,
     };
     try {
       const result = await col.insertOne(insertData);
@@ -33,8 +34,8 @@ export const update = async (app, dbname, collectionName, filter = {}, option = 
       }
     }
     try {
-      const result = await col.update(filter, updateData, option);
-      await col.update(filter, updatedate, option) 
+      const result = await col.updateOne(filter, updateData, option);
+      await col.updateOne(filter, updatedate, option) 
       return result;
     } catch (error) {
       throw error;   
