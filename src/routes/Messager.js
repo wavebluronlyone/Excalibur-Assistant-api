@@ -39,11 +39,11 @@ module.exports = async (app, option, next) => {
         receiveMessage,
     };
     try {
-      // fucntion to keep user input
+      // function to keep user input
       await create(app, dbName, 'Logs', logData);
       await saveUserData(client, userId, app);
-      const currentStateWorkflow = await SessionManager.currentStateWorkflow(app, userId);
-      if( currentStateWorkflow !== undefined && currentStateWorkflow.status !== 'finish' ) {
+      const currentSession = await SessionManager.currentSession(app, userId);
+      if( currentSession !== undefined && currentSession.status !== 'finish' ) {
         await SessionManager.nextStateWorkflow(app, userId);
         await SessionManager.sendState(app, userId);
       } else {
