@@ -5,7 +5,7 @@ import { saveUserData } from '../modules/Users';
 import fastifyJwt from 'fastify-jwt';
 import SessionManager from '../modules/SessionManager';
 
-module.exports = async (app, option, next) => {
+export default async (app, option, next) => {
   function verifyToken(req, reply) {
     const bearer = req.headers[`authorization`];
     if(typeof bearer !== 'undefined') {
@@ -55,11 +55,11 @@ module.exports = async (app, option, next) => {
           await SessionManager.sendState(app, userId);
         }
       }
+      reply.status(200).send({ repsoneMessage : 'receive message' });
     } catch (error) {
-      console.log(error);
+      reply.status(500).send({ error : error.stack });
+      console.log(error.stack);
     }
-
-    reply.status(200).send({ repsoneMessage : 'receive message' });
   });
 
   app.post('/api/messenger/sendmsg/',async (req,reply) => {
@@ -67,7 +67,7 @@ module.exports = async (app, option, next) => {
     const replyContent = req.body.replycontent;
     const userId = req.query.userid;
     if(typeof userId === 'undefined' || userId === '') {
-      return reply.status(400).send('require userid');
+      return reply.status(401).send('require userid');
     }
     console.log('to : ',userId);
     console.log(replyContent);
@@ -79,11 +79,11 @@ module.exports = async (app, option, next) => {
     try {
       await create(app, dbName, 'Logs', logData);
       await saveUserData(client, userId, app);
-      await client.pushMessage(userId,replyContent);
-      reply.status(200).send({ repsoneMessage : 'sended message' });
+      await client.pushMessage(userId, replyContent);
+      reply.status(200).send({ repsoneMessage : `1 Content Sended to ID: ${userId}` });
     } catch(error) {
-      reply.status(401).send({ error : error.stack });
-      throw error.stack;
+      reply.status(500).send({ error : error.stack });
+      console.log(error.stack);
     }
     });
     
@@ -100,9 +100,15 @@ module.exports = async (app, option, next) => {
       } else {
         console.log('find all logs');
       }
+
+      try {
+        const logs = await find(app, dbName, 'Logs',filter,{ _id : -1 });
+        reply.send(logs);
+      } catch (error) {
+        reply.status(500).send({ error : error.stack });
+        console.log(error.stack);
+      }
       
-      const logs = await find(app, dbName, 'Logs',filter,{ _id : -1 });
-      reply.send(logs);
     });
 
     app.get('/gtoken',async (req,reply) => {
@@ -111,4 +117,5 @@ module.exports = async (app, option, next) => {
         return reply.send( err|| {token} );
       })
     });
+    next();
 }

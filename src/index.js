@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import cors from 'cors';
 import config from './config';
 import { MongoClient } from 'mongodb';
@@ -17,7 +16,6 @@ MongoClient.connect(`${mongoUrl}`, { useNewUrlParser: true })
     app.register(Messager)
        .register(fastifyMongo, { client });
        
-    
     app.get('/api/healthcheck', (req, reply) => {
       reply.status(200).send({ status: 'ok'});
     });

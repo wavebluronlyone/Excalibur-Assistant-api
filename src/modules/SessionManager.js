@@ -134,38 +134,38 @@ class SessionAndMessageEngine {
     }
   }
 
-//   async isStateSaveContent(app, userId) {
-//     let result = false;
-//     const userSession = await this.currentSession(app, userId);
-//     const currentState = userSession.currentState;
-//     const workflow = await this.getWorkflowById(app, userSession.workflowId);
-//     const state = workflow.states.filter(state => currentState === state.state_name);
+  async isStateSaveContent(app, userId) {
+    let result = false;
+    const userSession = await this.currentSession(app, userId);
+    const currentState = userSession.currentState;
+    const workflow = await this.getWorkflowById(app, userSession.workflowId);
+    const state = workflow.states.filter(state => currentState === state.state_name);
 
-//     if (state.save_input !== true) {
-//       result = false;
-//     } else {
-//       result = true;
-//     }
+    if (state.save_input !== true) {
+      result = false;
+    } else {
+      result = true;
+    }
 
-//     return result;
-//   }
+    return result;
+  }
 
-//   async saveInputData(app, userId, inputContent) {
-//     const userSession = await this.currentSession(app, userId);
-//     const currentState = userSession.currentState;
-//     const workflow = await this.getWorkflowById(app, userSession.workflowId);
-//     const state = workflow.states.filter(state => currentState === state.state_name);
+  async saveInputData(app, userId, inputContent) {
+    const userSession = await this.currentSession(app, userId);
+    const currentState = userSession.currentState;
+    const workflow = await this.getWorkflowById(app, userSession.workflowId);
+    const state = workflow.states.filter(state => currentState === state.state_name);
 
-//     const inputValue = inputContent.text;
+    const inputValue = inputContent.text;
     
-//     const data = {
-//       field_input_name: state.field_input_name,
-//       field_value: inputValue,
-//     }
+    const data = {
+      field_input_name: state.field_input_name,
+      field_value: inputValue,
+    }
 
     
 
-  // }
+  }
 }
 
 export default new SessionAndMessageEngine();
