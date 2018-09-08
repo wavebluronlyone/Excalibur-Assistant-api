@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import cors from 'cors';
 import config from './config';
 import { MongoClient } from 'mongodb';

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --watch src src/index.js --exec babel-node --presets babel-preset-latest babel-preset-env",
-    "clean": "rm -rf /dist && mkdir /dist",
+    "clean": "rmdir -rf /dist && mkdir /dist",
     "build": "babel src -d dist && node dist/index.js"
   },
   "engines": {
