@@ -1,4 +1,5 @@
 import * as line from '@line/bot-sdk';
+import axios from 'axios';
 import config from '../config';
 import { create, find } from '../utils/mongodb';
 import { saveUserData } from '../modules/Users';
@@ -16,6 +17,19 @@ export default async (app, option, next) => {
 		} else {
 			return reply.status(401).send('token invalid !');
 		}
+	}
+
+	async function seenMessage(userId) {
+		const facebookContent = {
+			messaging_type: 'RESPONSE',
+			recipient: {
+				id: userId,
+			},
+			sender_action:'mark_seen'
+		};
+		console.log('Send seen message');
+		const url = `${config.facebookGraphUrl}/${config.pageid}/messages?access_token=${config.pageToken}`;
+		await axios.post(url, facebookContent);
 	}
 	const dbName = config.dbName;
 	const configLine = {
@@ -40,6 +54,7 @@ export default async (app, option, next) => {
 		};
 		if (typeof incomingMessage === 'undefined') {
 			console.log('Receive unknown message');
+			await seenMessage(userId);
 			reply.status(200).send({ repsoneMessage : 'receive unknown message ' });
 			return;
 		}
@@ -49,14 +64,18 @@ export default async (app, option, next) => {
 			await saveUserData(userId, app, 'facebook');
 			const currentSession = await SessionManager.currentSession(app, userId);
 			if( currentSession !== undefined && currentSession.status !== 'finish' ) {
+				console.log('Continues excute workflow');
 				await SessionManager.nextStateWorkflow(app, userId);
 				await SessionManager.sendState(app, userId, 'facebook');	
 			} else {
 				const keyword = incomingMessage.text;
 				const workflow = await SessionManager.getWorkflowByKeyword(app, keyword);
 				if((workflow && workflow._id) !== undefined){
+					console.log('Excute workflow by keyword ', keyword);
 					await SessionManager.startWorkflow(app, userId, workflow._id);
 					await SessionManager.sendState(app, userId, 'facebook');
+				} else {
+					await seenMessage(userId);
 				}
 			}
 			reply.status(200).send({ repsoneMessage : 'receive message' });

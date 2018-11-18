@@ -128,8 +128,9 @@ class SessionAndMessageEngine {
 					await create(app, config.dbName, 'Logs', logData);
 				} else if(media === 'facebook') {
 					content.reply_content.forEach( async message => {
-						if(message.type !== 'sticker') {
-							const facebookContent = {
+						let facebookContent = {};
+						if(message.type === 'text') {
+							facebookContent = {
 								messaging_type: 'RESPONSE',
 								recipient: {
 									id: userId,
@@ -138,10 +139,32 @@ class SessionAndMessageEngine {
 									text: message.text
 								}
 							};
-							const url = `${config.facebookGraphUrl}/${config.pageid}/messages?access_token=${config.pageToken}`;
-							await axios.post(url, facebookContent);
+						} else if (message.type === 'image') {
+							facebookContent = {
+								messaging_type: 'RESPONSE',
+								recipient: {
+									id: userId,
+								},
+								message:{
+									attachment:{
+										type:'image', 
+										payload:{
+											url: message.originalContentUrl, 
+										},
+									},
+								},
+							};
+						} else {
+							facebookContent = {
+								messaging_type: 'RESPONSE',
+								recipient: {
+									id: userId,
+								},
+								sender_action:'mark_seen'
+							};
 						}
-						
+						const url = `${config.facebookGraphUrl}/${config.pageid}/messages?access_token=${config.pageToken}`;
+						await axios.post(url, facebookContent);
 					});
 				}
 				console.log('Reply to: ', userId);
