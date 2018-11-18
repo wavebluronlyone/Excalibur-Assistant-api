@@ -28,32 +28,6 @@ export default async (app, option, next) => {
 
 	app.post('/api/messenger/receive/', async (req,reply) => {
 		const data =  req.body.data;
-		// console.log(JSON.stringify(data));
-		// {
-		//   "object": "page",
-		//   "entry": [
-		//     {
-		//       "id": "2167996479889568",
-		//       "time": 1542471641739,
-		//       "messaging": [
-		//         {
-		//           "sender": {
-		//             "id": "2156043167741968"
-		//           },
-		//           "recipient": {
-		//             "id": "2167996479889568"
-		//           },
-		//           "timestamp": 1542471641287,
-		//           "message": {
-		//             "mid": "EkwV67X9ifWJMIsIKgKieRXWdyIJgzhQ7nJI-zG3ABWivBV9KdFpfGFNMh-t9b02td84NkaIwQnLWft10fl3FQ",
-		//             "seq": 621701,
-		//             "text": "test"
-		//           }
-		//         }
-		//       ]
-		//     }
-		//   ]
-		// }
 		console.log('[Facebook]');
 		const userId = data.entry[0].messaging[0].sender.id;
 		const incomingMessage = data.entry[0].messaging[0].message;
@@ -72,7 +46,7 @@ export default async (app, option, next) => {
 		try {
 			// function to keep user input
 			await create(app, dbName, 'Logs', logData);
-			// await saveUserData(userId, app, 'facebook');
+			await saveUserData(userId, app, 'facebook');
 			const currentSession = await SessionManager.currentSession(app, userId);
 			if( currentSession !== undefined && currentSession.status !== 'finish' ) {
 				await SessionManager.nextStateWorkflow(app, userId);

@@ -13,7 +13,7 @@ const channelSecret = '07e6be49c56c7f5b0dc477d5295d611d';
 
 const lineUrl =  'https://api.line.me/v2/bot/message/reply';
 const facebookGraphUrl = 'https://graph.facebook.com/v3.2';
-const pageToken = 'EAAEoh1A3uxMBAPFZC3KSMHC7i77A75tJaF9FDr2dWQ7ZC4PtJVZC0WIfPoDcRhwiaZCyM6CsOffM2kDxCux9v6c7xt24vS52b1B4pOlbFDrLIxaUELuMPrByfR7ZBPMZAh1BZAjBRi4taFhA2mZAipH2kvRJ1Lv2d3rpfMRI8tYRGWQJMErZAR4FVTbkYFCtXZB0ZCAuf5GNEIbWQZDZD';
+const pageToken = 'EAAEoh1A3uxMBAMWZBUZAXSM7xHoeNouaVaAqmQEAzJxEndZCaaOK3z1uVq9UzFwjgvNsZAZA3apKy9UNoRPDvHzZBBcPaPdhGT7KV9WS7HRB6gYZBOCWA0iryrtyOfVlTorMT2Yw1WsdJYxxd1FE7rmHI9pzpJEDWXUYpmPdjLjxntbEZAYcQd2g';
 const appToken = '326036608236307|URloOjuDuSZo0uIrAZmDlKm8IAk';
 const pageid = '2167996479889568';
 const secret = 'whoisyourdady';

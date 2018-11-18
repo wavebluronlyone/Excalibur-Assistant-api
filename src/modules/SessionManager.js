@@ -139,9 +139,7 @@ class SessionAndMessageEngine {
 								}
 							};
 							const url = `${config.facebookGraphUrl}/${config.pageid}/messages?access_token=${config.pageToken}`;
-							console.log('sending url ', url);
-							const response = await axios.post(url, facebookContent);
-							console.log(response.data);
+							await axios.post(url, facebookContent);
 						}
 						
 					});
