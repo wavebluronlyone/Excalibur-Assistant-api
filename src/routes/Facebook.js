@@ -11,7 +11,7 @@ export default async (app, option, next) => {
 		const bearer = req.headers['authorization'];
 		if(typeof bearer !== 'undefined') {
 			const token = bearer.split(' ')[1];
-			app.jwt.verify(token, (err, decode) => {
+			app.jwt.verify(token, (err) => {
 				err ? reply.status(401).send('token invalid !') : '';
 			});
 		} else {

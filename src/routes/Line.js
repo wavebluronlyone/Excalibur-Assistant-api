@@ -10,7 +10,7 @@ export default async (app, option, next) => {
 		const bearer = req.headers['authorization'];
 		if(typeof bearer !== 'undefined') {
 			const token = bearer.split(' ')[1];
-			app.jwt.verify(token, (err, decode) => {
+			app.jwt.verify(token, (err) => {
 				err ? reply.status(401).send('token invalid !') : '';
 			});
 		} else {
@@ -44,14 +44,15 @@ export default async (app, option, next) => {
 			await saveUserData(userId, app);
 			const currentSession = await SessionManager.currentSession(app, userId);
 			if( currentSession !== undefined && currentSession.status !== 'finish' ) {
+				console.log('Continues excute workflow');
 				await SessionManager.nextStateWorkflow(app, userId);
 				await SessionManager.sendState(app, userId);
 			} else {
 				const keyword = incomingMessage.text;
 				const workflow = await SessionManager.getWorkflowByKeyword(app, keyword);
-				const worlflowid = workflow._id;
-				if(worlflowid !== undefined){
-					await SessionManager.startWorkflow(app, userId, worlflowid);
+				if((workflow && workflow._id) !== undefined){
+					console.log('Excute workflow by keyword ', keyword);
+					await SessionManager.startWorkflow(app, userId, workflow._id);
 					await SessionManager.sendState(app, userId);
 				}
 			}
