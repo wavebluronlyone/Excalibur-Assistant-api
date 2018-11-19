@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch src src/index.js --exec babel-node --presets babel-preset-latest babel-preset-env",
+    "start": "nodemon --watch src src/index.js --exec babel-node --presets babel-preset-env",
     "clean": "rmdir -rf /dist && mkdir /dist",
     "build": "babel src -d dist && node dist/index.js"
   },
   "engines": {
-    "node": "10.5.0"
+    "node": "10.13.0"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-latest": "^6.24.1",
@@ -44,15 +45,9 @@
     "fastify-webhook": "^0.2.0",
     "moment": "^2.22.2",
     "mongodb": "^3.1.1",
-    "qs": "^6.5.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+    "qs": "^6.5.2"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.4.0"
+    "eslint": "^4.19.1"
   }
 }

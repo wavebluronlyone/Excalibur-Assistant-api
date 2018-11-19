@@ -12,8 +12,11 @@ const channelSecret = '07e6be49c56c7f5b0dc477d5295d611d';
 
 
 const lineUrl =  'https://api.line.me/v2/bot/message/reply';
-
-const secret = 'whoisyourdady'
+const facebookGraphUrl = 'https://graph.facebook.com/v3.2';
+const pageToken = 'EAAEoh1A3uxMBAMWZBUZAXSM7xHoeNouaVaAqmQEAzJxEndZCaaOK3z1uVq9UzFwjgvNsZAZA3apKy9UNoRPDvHzZBBcPaPdhGT7KV9WS7HRB6gYZBOCWA0iryrtyOfVlTorMT2Yw1WsdJYxxd1FE7rmHI9pzpJEDWXUYpmPdjLjxntbEZAYcQd2g';
+const appToken = '326036608236307|URloOjuDuSZo0uIrAZmDlKm8IAk';
+const pageid = '2167996479889568';
+const secret = 'whoisyourdady';
 
 // -- Mongo -- //
 const dbuser = 'waveblur';
@@ -22,11 +25,15 @@ const mongoUrl = `mongodb://${dbuser}:${dbpass}@ds123532.mlab.com:23532/heroku_c
 const dbName = 'heroku_c5rxsb5d';
 
 export default {
-  port,
-  channelAccessToken,
-  channelSecret,
-  mongoUrl,
-  lineUrl,
-  dbName,
-  secret,
-}
+	port,
+	channelAccessToken,
+	channelSecret,
+	mongoUrl,
+	lineUrl,
+	dbName,
+	secret,
+	facebookGraphUrl,
+	pageToken,
+	appToken,
+	pageid,
+};
