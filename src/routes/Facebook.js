@@ -61,7 +61,7 @@ export default async (app, option, next) => {
 		try {
 			// function to keep user input
 			await create(app, dbName, 'Logs', logData);
-			await saveUserData(userId, app, 'facebook');
+			// await saveUserData(userId, app, 'facebook');
 			const currentSession = await SessionManager.currentSession(app, userId);
 			if( currentSession !== undefined && currentSession.status !== 'finish' ) {
 				console.log('Continues excute workflow');
