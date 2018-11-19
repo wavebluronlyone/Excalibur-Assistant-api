@@ -17,10 +17,10 @@ const pageid = '2167996479889568';
 const secret = 'whoisyourdady';
 
 // -- Mongo -- //
-const dbuser = 'waveblur';
-const dbpass = 'waveza555';
-const mongoUrl = `mongodb://${dbuser}:${dbpass}@ds123532.mlab.com:23532/heroku_c5rxsb5d`;
-const dbName = 'heroku_c5rxsb5d';
+const dbuser = process.env.dbuser || 'waveblur' ;
+const dbpass = process.env.dbpass || 'waveza555';
+const mongoUrl = `mongodb://${dbuser}:${dbpass}@${ process.env.MONGO || 'ds247688.mlab.com:47688/heroku_ngg8khv8'}`;
+const dbName = process.env.dbName || 'heroku_ngg8khv8';
 
 export default {
 	port,
