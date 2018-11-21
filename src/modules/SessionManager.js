@@ -33,9 +33,8 @@ class SessionAndMessageEngine {
 	}
 
 	async getWorkflowByKeyword(app, keyword) {
-		const search = new RegExp(`${keyword}`);
 		const filter = {
-			start_keywords: search,
+			start_keywords: keyword,
 		};
 		try {
 			const workflow = await find(app, config.dbName, 'Workflows', filter);
