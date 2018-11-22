@@ -3,7 +3,7 @@ import config from '../config';
 import { create, find } from '../utils/mongodb';
 import { saveUserData } from '../modules/Users';
 import fastifyJwt from 'fastify-jwt';
-import SessionManager from '../modules/SessionManager';
+import SessionManager from '../modules/workflow';
 
 export default async (app, option, next) => {
 	function verifyToken(req, reply) {
