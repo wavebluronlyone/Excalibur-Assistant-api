@@ -18,16 +18,16 @@ services:
       && yarn run build 
       && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
       && pm2-docker start daemon-app.js --instances 1"
-  excalibur-nginx:
-    image: nginx:1.13-alpine
-    container_name: excalibur-nginx
+  excalibur-api-nginx:
+    image: nginx:1.15.6-alpine
+    container_name: excalibur-api-nginx
     restart: always
     depends_on: 
       - excalibur-api-node
     ports: 
       - "3000:3000"
     volumes: 
-      - ../nginx/config.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     links:
       - excalibur-api-node
     build: .
