@@ -19,12 +19,13 @@ services:
       && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
       && pm2-docker start daemon-app.js --instances 1"
   excalibur-nginx:
-    image: nginx-alpin:lastest
-    volumes:
-      - nginx.conf:/etc/nginx/nginx.conf
+    image: nginx:1.15.6
+    build: nginx/
     container_name: excalibur-nginx
+    links:
+      - excalibur-api-node
     depends_on:
       - excalibur-api-node
     ports:
-      - "8081:8081"
+      - "3000:8081"
   
