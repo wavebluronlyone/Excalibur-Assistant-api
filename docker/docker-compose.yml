@@ -1,0 +1,38 @@
+version: '3'
+services:
+  excalibur-api-node:  
+    build: .
+    container_name: excalibur-api-node
+    tty: true
+    volumes:
+      - ./:/app
+    ports:
+      - "3003:3003"
+    working_dir: /app
+    environment:
+      - channelAccessToken=DvWUMt4/HO35bxaw7gB8iakGcQ9XpCLPCNFFx4QG32WXCrUTaWuWNyfiBi3OgveStgdgP1rU0t0porXG8rbtrA+GGSet2+f24uxFfSZfVI0tA4CDJJL39eWoB0VclGV2yXN1n2BEEOGZ3fnysEOVuAdB04t89/1O/w1cDnyilFU=
+      - channelSecret=07e6be49c56c7f5b0dc477d5295d611d
+      - pageToken=326036608236307|URloOjuDuSZo0uIrAZmDlKm8IAk
+      - pageid=2167996479889568
+      - dbName=Excalibur
+      - NODE_ENV=production
+    command: >
+      sh -c "yarn --ignore-engines
+      && yarn run build 
+      && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
+      && pm2-docker start daemon-app.js --instances 1"
+  nginx:
+    image: nginx:1.15.6-alpine
+    container_name: nginx
+    restart: always
+    depends_on: 
+      - excalibur-api-node
+    ports: 
+      - "8081:8081"
+    volumes: 
+      - ./nginx/config.conf:/etc/nginx/nginx.conf
+    logging:
+     driver: json-file
+     options:
+      max-size: 50m
+  
