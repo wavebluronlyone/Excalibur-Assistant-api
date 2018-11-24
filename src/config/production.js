@@ -17,7 +17,7 @@ const pageid = process.env.pageid ? process.env.pageid : errorNoEnv('pageid');
 const secret = 'whoisyourdady';
 
 // -- Mongo -- //
-const mongoUrl = process.env.MONGO || 'mongodb://waveblur@waveza555ds247688.mlab.com:47688/heroku_ngg8khv8';
+const mongoUrl = process.env.MONGO || 'mongodb://waveblur:waveza555@ds247688.mlab.com:47688/heroku_ngg8khv8';
 const dbName = process.env.dbName || 'heroku_ngg8khv8';
 
 export default {

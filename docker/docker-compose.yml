@@ -14,7 +14,6 @@ services:
       - channelSecret=07e6be49c56c7f5b0dc477d5295d611d
       - pageToken=326036608236307|URloOjuDuSZo0uIrAZmDlKm8IAk
       - pageid=2167996479889568
-      - dbName=Excalibur
       - NODE_ENV=production
     command: >
       sh -c "yarn --ignore-engines
