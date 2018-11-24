@@ -7,6 +7,8 @@ services:
     volumes:
       - ../:/app
     working_dir: /app
+    ports: 
+      - "3003:8081"
     environment:
       - channelAccessToken=DvWUMt4/HO35bxaw7gB8iakGcQ9XpCLPCNFFx4QG32WXCrUTaWuWNyfiBi3OgveStgdgP1rU0t0porXG8rbtrA+GGSet2+f24uxFfSZfVI0tA4CDJJL39eWoB0VclGV2yXN1n2BEEOGZ3fnysEOVuAdB04t89/1O/w1cDnyilFU=
       - channelSecret=07e6be49c56c7f5b0dc477d5295d611d
@@ -18,21 +20,4 @@ services:
       && yarn run build 
       && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
       && pm2-docker start daemon-app.js --instances 1"
-  excalibur-api-nginx:
-    image: nginx:1.15.6-alpine
-    container_name: excalibur-api-nginx
-    restart: always
-    depends_on: 
-      - excalibur-api-node
-    ports: 
-      - "3000:3000"
-    volumes: 
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    links:
-      - excalibur-api-node
-    build: .
-    logging:
-     driver: json-file
-     options:
-      max-size: 50m
   
