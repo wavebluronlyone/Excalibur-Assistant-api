@@ -6,8 +6,6 @@ services:
     tty: true
     volumes:
       - ../:/app
-    ports:
-      - "3003:3003"
     working_dir: /app
     environment:
       - channelAccessToken=DvWUMt4/HO35bxaw7gB8iakGcQ9XpCLPCNFFx4QG32WXCrUTaWuWNyfiBi3OgveStgdgP1rU0t0porXG8rbtrA+GGSet2+f24uxFfSZfVI0tA4CDJJL39eWoB0VclGV2yXN1n2BEEOGZ3fnysEOVuAdB04t89/1O/w1cDnyilFU=
@@ -27,9 +25,9 @@ services:
     depends_on: 
       - excalibur-api-node
     ports: 
-      - "8081:8081"
+      - "3000:3000"
     volumes: 
-      - ../nginx/config.conf:/etc/nginx/nginx.conf:ro
+      - ../nginx/config.conf:/etc/nginx/nginx.conf
     links:
       - excalibur-api-node
     build: .
