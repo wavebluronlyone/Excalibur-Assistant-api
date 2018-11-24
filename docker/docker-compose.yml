@@ -30,7 +30,10 @@ services:
     ports: 
       - "8081:8081"
     volumes: 
-      - ./nginx/config.conf:/etc/nginx/nginx.conf
+      - ../nginx/config.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - excalibur-api-node
+    build: .
     logging:
      driver: json-file
      options:

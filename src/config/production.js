@@ -13,13 +13,11 @@ const lineUrl =  'https://api.line.me/v2/bot/message/reply';
 // facebook
 const facebookGraphUrl = 'https://graph.facebook.com/v3.2';
 const pageToken = process.env.pageToken ? process.env.pageToken : errorNoEnv('pageToken');
-const pageid = '2167996479889568';
+const pageid = process.env.pageid ? process.env.pageid : errorNoEnv('pageid');
 const secret = 'whoisyourdady';
 
 // -- Mongo -- //
-const dbuser = process.env.dbuser || 'waveblur' ;
-const dbpass = process.env.dbpass || 'waveza555';
-const mongoUrl = `mongodb://${dbuser}:${dbpass}@${ process.env.MONGO || 'ds247688.mlab.com:47688/heroku_ngg8khv8'}`;
+const mongoUrl = process.env.MONGO || 'mongodb://waveblur@waveza555ds247688.mlab.com:47688/heroku_ngg8khv8';
 const dbName = process.env.dbName || 'heroku_ngg8khv8';
 
 export default {
