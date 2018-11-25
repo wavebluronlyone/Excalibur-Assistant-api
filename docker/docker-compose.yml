@@ -27,5 +27,5 @@ services:
     depends_on:
       - excalibur-api-node
     ports:
-      - "3000:8081"
+      - "8081:8081"
   
