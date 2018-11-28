@@ -26,14 +26,7 @@ const create = async(app, dbname, collectionName, data) => {
 	}
 };
 
-const update = async(
-	app,
-	dbname,
-	collectionName,
-	filter = {},
-	option = {},
-	data = {},
-) => {
+const update = async(app, dbname, collectionName, filter = {}, option = {}, data = {}) => {
 	const col = app.mongo.client.db(dbname).collection(collectionName);
 	const now = new Date();
 	const rawData = data;

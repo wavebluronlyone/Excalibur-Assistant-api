@@ -58,6 +58,7 @@ module.exports = (app, option, next) => {
 			console.log('Receive unknown message');
 			await seenMessage(userId);
 			reply.status(200).send({ repsoneMessage: 'receive unknown message ' });
+
 			return;
 		}
 		try {
@@ -141,6 +142,7 @@ module.exports = (app, option, next) => {
 	app.get('/gtoken', (req, reply) => {
 		reply.jwtSign({ SurpiceMother: 'fucker' }, (err, token) => {
 			if (err) console.log(err.stack);
+
 			return reply.send(err || { token });
 		});
 	});
