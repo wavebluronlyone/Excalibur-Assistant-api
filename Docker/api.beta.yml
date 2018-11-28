@@ -1,23 +1,24 @@
-version: '3'
+version: '3.5'
 services:
   excalibur-api-node:  
-    build: /node
+    build: node/
     container_name: excalibur-api-node
     tty: true
-    ports: 
-      - "3003:8081" 
+    networks:
+      - api_network_beta
     volumes:
       - ../:/app
     working_dir: /app
+    ports: 
+      - "3003:3003"
     environment:
-      - channelAccessToken=DvWUMt4/HO35bxaw7gB8iakGcQ9XpCLPCNFFx4QG32WXCrUTaWuWNyfiBi3OgveStgdgP1rU0t0porXG8rbtrA+GGSet2+f24uxFfSZfVI0tA4CDJJL39eWoB0VclGV2yXN1n2BEEOGZ3fnysEOVuAdB04t89/1O/w1cDnyilFU=
-      - channelSecret=07e6be49c56c7f5b0dc477d5295d611d
-      - pageToken=326036608236307|URloOjuDuSZo0uIrAZmDlKm8IAk
-      - pageid=2167996479889568
-      - NODE_ENV=production
+      - NODE_ENV=dev
     command: >
       sh -c "yarn --ignore-engines
       && yarn run build 
       && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
       && pm2-docker start daemon-app.js --instances 1"
+networks:
+  api_network_beta: 
+    name: api_network_dev
 

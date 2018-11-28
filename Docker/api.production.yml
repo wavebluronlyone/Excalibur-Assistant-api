@@ -1,9 +1,11 @@
-version: '3'
+version: '3.5'
 services:
   excalibur-api-node:  
-    build: /node
+    build: node/
     container_name: excalibur-api-node
     tty: true
+    networks:
+      - excalibur_api_network
     volumes:
       - ../:/app
     working_dir: /app
@@ -22,10 +24,13 @@ services:
     image: nginx:1.15.6
     build: nginx/
     container_name: excalibur-api-nginx
-    links:
-      - excalibur-api-node
+    networks:
+      - excalibur_api_network
     depends_on:
       - excalibur-api-node
     ports:
       - "8081:8081"
+networks:
+  excalibur_api_network:
+    name: excalibur_api_network
   
