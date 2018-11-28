@@ -1,7 +1,7 @@
 version: '3'
 services:
   excalibur-api-node:  
-    build: /node
+    build: node/
     container_name: excalibur-api-node
     tty: true
     volumes:

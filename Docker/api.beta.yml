@@ -4,11 +4,11 @@ services:
     build: node/
     container_name: excalibur-api-node
     tty: true
+    ports: 
+      - "3003:8081"
     volumes:
       - ../:/app
     working_dir: /app
-    ports: 
-      - "3003:8081"
     environment:
       - NODE_ENV=dev
     command: >
@@ -16,3 +16,4 @@ services:
       && yarn run build 
       && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
       && pm2-docker start daemon-app.js --instances 1"
+
