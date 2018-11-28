@@ -9,10 +9,8 @@ const Facebook = require('./routes/Facebook');
 const port = config.port;
 const mongoUrl = config.mongoUrl;
 
-MongoClient.connect(
-	`${mongoUrl}`,
-	{ useNewUrlParser: true },
-)
+MongoClient.connect(`${mongoUrl}`,
+	{ useNewUrlParser: true })
 	.then(client => {
 		const app = new fastify();
 		app.use(cors());

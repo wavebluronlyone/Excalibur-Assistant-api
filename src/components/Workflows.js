@@ -11,6 +11,7 @@ class SessionAndMessageEngine {
 		};
 		try {
 			const result = await find(app, config.dbName, 'Sessions', filter);
+
 			return result[0];
 		} catch (error) {
 			throw error.stack;
@@ -26,6 +27,7 @@ class SessionAndMessageEngine {
 			if (workflow[0] === undefined) {
 				return;
 			}
+
 			return workflow[0];
 		} catch (error) {
 			throw error.stack;
@@ -41,6 +43,7 @@ class SessionAndMessageEngine {
 			if (workflow[0] === undefined) {
 				return;
 			}
+
 			return workflow[0];
 		} catch (error) {
 			throw error.stack;
@@ -55,28 +58,26 @@ class SessionAndMessageEngine {
 		let sessionData = {};
 		const workflow = await this.getWorkflowById(app, workflowId);
 		workflow.states.length <= 1
-			? (sessionData = {
-				userId,
-				workflowId,
-				currentState: 'end',
-				status: 'finish',
-			  })
+			? (
+				sessionData = {
+					userId,
+					workflowId,
+					currentState: 'end',
+					status: 'finish'
+				})
 			: (sessionData = {
 				userId,
 				workflowId,
 				currentState: 'start',
 				status: 'pending',
-			  });
-
+			});
 		try {
-			await update(
-				app,
+			await update(app,
 				config.dbName,
 				'Sessions',
 				filter,
 				{ upsert: true },
-				sessionData,
-			);
+				sessionData);
 		} catch (error) {
 			throw error.stack;
 		}
@@ -91,14 +92,10 @@ class SessionAndMessageEngine {
 			return;
 		}
 
-		const raw_currentState = Session.currentState;
-		const currentState = workflow.states.filter(
-			state => state.state_name === raw_currentState,
-		);
+		const rawCurrentState = Session.currentState;
+		const currentState = workflow.states.filter(state => state.state_name === rawCurrentState);
 		const nextStateName = currentState[0].next_state;
-		const nextState = workflow.states.filter(
-			state => state.state_name === nextStateName,
-		);
+		const nextState = workflow.states.filter(state => state.state_name === nextStateName);
 		let updateSessionData = {};
 
 		if (nextState[0].state_type !== 'end') {
@@ -113,14 +110,12 @@ class SessionAndMessageEngine {
 			};
 		}
 		try {
-			await update(
-				app,
+			await update(app,
 				config.dbName,
 				'Sessions',
 				{ userId },
 				{},
-				updateSessionData,
-			);
+				updateSessionData);
 		} catch (error) {
 			throw error.stack;
 		}
@@ -134,9 +129,7 @@ class SessionAndMessageEngine {
 			channelAccessToken: config.channelAccessToken,
 			channelSecret: config.channelSecret,
 		};
-		const contents = workflow.states.filter(
-			state => currentState === state.state_name,
-		);
+		const contents = workflow.states.filter(state => currentState === state.state_nae);
 		try {
 			contents.forEach(async content => {
 				const logData = {

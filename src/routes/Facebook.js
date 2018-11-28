@@ -6,7 +6,7 @@ const { saveUserData } = require('../components/Users');
 const fastifyJwt = require('fastify-jwt');
 const SessionManager = require('../components/Workflows');
 
-module.exports = async (app, option, next) => {
+module.exports = (app, option, next) => {
 	function verifyToken(req, reply) {
 		const bearer = req.headers['authorization'];
 		if (typeof bearer !== 'undefined') {
@@ -42,7 +42,7 @@ module.exports = async (app, option, next) => {
 
 	app.register(fastifyJwt, { secret: `${config.secret}` });
 
-	app.post('/api/messenger/receive/', async (req, reply) => {
+	app.post('/api/messenger/receive/', async(req, reply) => {
 		const data = req.body.data;
 		console.log('[Facebook]');
 		const userId = data.entry[0].messaging[0].sender.id;
@@ -71,10 +71,8 @@ module.exports = async (app, option, next) => {
 				await SessionManager.sendState(app, userId, 'facebook');
 			} else {
 				const keyword = incomingMessage.text;
-				const workflow = await SessionManager.getWorkflowByKeyword(
-					app,
-					keyword,
-				);
+				const workflow = await SessionManager.getWorkflowByKeyword(app,
+					keyword);
 				if ((workflow && workflow._id) !== undefined) {
 					console.log('Excute workflow by keyword ', keyword);
 					await SessionManager.startWorkflow(app, userId, workflow._id);
@@ -90,7 +88,7 @@ module.exports = async (app, option, next) => {
 		}
 	});
 
-	app.post('/api/messenger/sendmsg/', async (req, reply) => {
+	app.post('/api/messenger/sendmsg/', async(req, reply) => {
 		verifyToken(req, reply);
 		const replyContent = req.body.replycontent;
 		const userId = req.query.userid;
@@ -117,7 +115,7 @@ module.exports = async (app, option, next) => {
 		}
 	});
 
-	app.get('/api/messenger/logs/', async (req, reply) => {
+	app.get('/api/messenger/logs/', async(req, reply) => {
 		verifyToken(req, reply);
 		const lineid = req.query.userid;
 		let filter = {};
@@ -140,7 +138,7 @@ module.exports = async (app, option, next) => {
 		}
 	});
 
-	app.get('/gtoken', async (req, reply) => {
+	app.get('/gtoken', (req, reply) => {
 		reply.jwtSign({ SurpiceMother: 'fucker' }, (err, token) => {
 			if (err) console.log(err.stack);
 			return reply.send(err || { token });

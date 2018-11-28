@@ -1,13 +1,14 @@
-const find = async (app, dbname, collectionName, filter = {}, sort = {}) => {
+const find = async(app, dbname, collectionName, filter = {}, sort = {}) => {
 	const col = app.mongo.client.db(dbname).collection(collectionName);
 	const data = await col
 		.find(filter)
 		.sort(sort)
 		.toArray();
+
 	return data;
 };
 
-const create = async (app, dbname, collectionName, data) => {
+const create = async(app, dbname, collectionName, data) => {
 	const col = app.mongo.client.db(dbname).collection(collectionName);
 	const now = new Date();
 	const rawData = data;
@@ -18,13 +19,14 @@ const create = async (app, dbname, collectionName, data) => {
 	};
 	try {
 		const result = await col.insertOne(insertData);
+
 		return result;
 	} catch (error) {
 		throw error;
 	}
 };
 
-const update = async (
+const update = async(
 	app,
 	dbname,
 	collectionName,
@@ -48,6 +50,7 @@ const update = async (
 	try {
 		const result = await col.updateOne(filter, updateData, option);
 		await col.updateOne(filter, updatedate, option);
+
 		return result;
 	} catch (error) {
 		throw error;
