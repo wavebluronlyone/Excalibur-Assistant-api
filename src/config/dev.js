@@ -18,7 +18,7 @@ const dbpass = 'waveza555';
 const mongoUrl = `mongodb://${dbuser}:${dbpass}@ds247688.mlab.com:47688/heroku_ngg8khv8`;
 const dbName = 'heroku_ngg8khv8';
 
-export default {
+module.exports = {
 	port,
 	channelAccessToken,
 	channelSecret,

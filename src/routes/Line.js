@@ -1,11 +1,11 @@
-import * as line from '@line/bot-sdk';
-import config from '../config';
-import { create, find } from '../utils/mongodb';
-import { saveUserData } from '../modules/Users';
-import fastifyJwt from 'fastify-jwt';
-import SessionManager from '../modules/Workflows';
+const line = require('@line/bot-sdk');
+const config = require('../config');
+const { create, find } = require('../utils/mongodb');
+const { saveUserData } = require('../modules/Users');
+const fastifyJwt = require('fastify-jwt');
+const SessionManager = require('../modules/Workflows');
 
-export default async (app, option, next) => {
+module.exports = async (app, option, next) => {
 	function verifyToken(req, reply) {
 		const bearer = req.headers['authorization'];
 		if(typeof bearer !== 'undefined') {

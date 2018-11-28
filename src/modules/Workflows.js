@@ -1,8 +1,8 @@
-import { ObjectId } from 'mongodb';
-import * as line from '@line/bot-sdk';
-import axios from 'axios';
-import { find, update, create } from '../utils/mongodb';
-import config from '../config';
+const { ObjectId } = require('mongodb');
+const line = require('@line/bot-sdk');
+const axios = require('axios');
+const { find, update, create } = require('../utils/mongodb');
+const config = require('../config');
 
 class SessionAndMessageEngine {
 	async currentSession(app, userId) {
@@ -175,4 +175,4 @@ class SessionAndMessageEngine {
 	}
 }
 
-export default new SessionAndMessageEngine();
+module.exports = new SessionAndMessageEngine();

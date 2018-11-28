@@ -1,9 +1,9 @@
-import * as line from '@line/bot-sdk';
-import { update } from '../utils/mongodb';
-import config from '../config';
-import axios from 'axios';
+const line = require('@line/bot-sdk');
+const { update } = require('../utils/mongodb');
+const config = require('../config');
+const axios = require('axios');
 
-export const saveUserData = async (userId, app, media = 'line') => {
+const saveUserData = async (userId, app, media = 'line') => {
 	const { dbName } = config;
 	const configLine = {
 		channelAccessToken: config.channelAccessToken,
@@ -33,3 +33,6 @@ export const saveUserData = async (userId, app, media = 'line') => {
 		throw error;
 	}
 };
+
+module.exports = saveUserData;
+ 

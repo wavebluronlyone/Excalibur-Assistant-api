@@ -1,15 +1,13 @@
-import 'babel-polyfill';
-import cors from 'cors';
-import config from './config';
-import { MongoClient } from 'mongodb';
-import fastify from 'fastify';
-import fastifyMongo from 'fastify-mongodb';
-import Line from './routes/Line';
-import Facebook from './routes/Facebook';
+const cors = require('cors');
+const config = require('./config');
+const { MongoClient } = require('mongodb');
+const fastify = require('fastify');
+const fastifyMongo = require('fastify-mongodb');
+const Line = require('./routes/Line');
+const Facebook = require('./routes/Facebook');
 
 const port = config.port;
 const mongoUrl = config.mongoUrl;
-
 
 MongoClient.connect(`${mongoUrl}`, { useNewUrlParser: true })
 	.then(client => {
