@@ -1,15 +1,11 @@
 {
   "name": "excalibur-assitant-api",
-  "version": "0.0.1",
-  "description": "a personal line chat bot",
+  "version": "2.0.0",
+  "description": "a chat engine bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch src src/index.js --exec babel-node --presets babel-preset-env",
-    "clean": "rmdir -rf /dist",
-    "build": "babel src -d dist",
-    "heroku": "yarn run build && yarn run poststart",
-    "poststart": "NODE_ENV=production node dist/index.js"
+    "start": "nodemon --watch --verbose src src/index.js",
+    "heroku": "node src/index.js"
   },
   "engines": {
     "node": "10.13.0"
@@ -18,12 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/wavebluronlyone/Excalibur-Assistant-api.git"
   },
-  "keywords": [
-    "LineBot",
-    "Lineapi"
-  ],
   "author": "WaveBlur",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wavebluronlyone/Excalibur-Assistant/issues"
   },
@@ -33,13 +25,6 @@
     "ajv": "^5.0.0",
     "amqplib": "*",
     "axios": "^0.18.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-latest": "^6.24.1",
-    "babel-register": "^6.26.0",
     "cors": "^2.8.4",
     "fastify": "^1.9.0",
     "fastify-jwt": "^0.3.0",

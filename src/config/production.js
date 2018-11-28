@@ -1,14 +1,14 @@
 const port = process.env.PORT || 3003;
 
 function errorNoEnv(key) {
-	console.log('Error no config variable key: ',key);
+	console.log('Error no config variable key: ', key);
 	process.exit(0);
 }
 
 //Line 
-const channelAccessToken = process.env.channelAccessToken ? process.env.channelAccessToken: errorNoEnv('channelAccessToken (line)'); 
-const channelSecret = process.env.channelSecret ? process.env.channelSecret : errorNoEnv('channelSecret (line)'); 
-const lineUrl =  'https://api.line.me/v2/bot/message/reply';
+const channelAccessToken = process.env.channelAccessToken ? process.env.channelAccessToken : errorNoEnv('channelAccessToken (line)');
+const channelSecret = process.env.channelSecret ? process.env.channelSecret : errorNoEnv('channelSecret (line)');
+const lineUrl = 'https://api.line.me/v2/bot/message/reply';
 
 // facebook
 const facebookGraphUrl = 'https://graph.facebook.com/v3.2';
@@ -20,7 +20,7 @@ const secret = 'whoisyourdady';
 const mongoUrl = process.env.MONGO || 'mongodb://waveblur:waveza555@ds247688.mlab.com:47688/heroku_ngg8khv8';
 const dbName = process.env.dbName || 'heroku_ngg8khv8';
 
-export default {
+module.exports = {
 	port,
 	channelAccessToken,
 	channelSecret,

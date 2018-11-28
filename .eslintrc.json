@@ -11,7 +11,8 @@
     "rules": {
         "indent": [
             "error",
-            "tab"
+            "tab",
+            { "MemberExpression": 1 }
         ],
         "linebreak-style": [
             "error",
@@ -25,6 +26,29 @@
             "error",
             "always"
         ],
-        "no-console": 0
+        "no-console": 0,
+        "arrow-spacing": "error",
+        "space-before-function-paren": ["error","never"],
+        "space-in-parens": ["error", "never"],
+        "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
+        "func-call-spacing": ["error", "never"],
+        "camelcase":[
+            "error",
+            {"properties": "never"}
+        ],
+        "comma-style": ["error", "last"],
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "array-element-newline": ["error", "never"],
+        "function-paren-newline": ["error", "never"],
+        "no-sparse-arrays": ["error"],
+        "require-await": "error",
+        "eqeqeq": "error",
+        "eol-last": ["error", "always"],
+        "padding-line-between-statements": [
+            "error",
+            { "blankLine": "always", "prev": "*", "next": "return" }
+        ],
+        "lines-between-class-members": ["error", "always"],
+        "func-style": ["error", "declaration", { "allowArrowFunctions": true }]
     }
 }

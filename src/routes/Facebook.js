@@ -1,17 +1,17 @@
-import * as line from '@line/bot-sdk';
-import axios from 'axios';
-import config from '../config';
-import { create, find } from '../utils/mongodb';
-import { saveUserData } from '../modules/Users';
-import fastifyJwt from 'fastify-jwt';
-import SessionManager from '../modules/Workflows';
+const line = require('@line/bot-sdk');
+const axios = require('axios');
+const config = require('../config');
+const { create, find } = require('../utils/mongodb');
+const { saveUserData } = require('../components/Users');
+const fastifyJwt = require('fastify-jwt');
+const SessionManager = require('../components/Workflows');
 
-export default async (app, option, next) => {
+module.exports = (app, option, next) => {
 	function verifyToken(req, reply) {
 		const bearer = req.headers['authorization'];
-		if(typeof bearer !== 'undefined') {
+		if (typeof bearer !== 'undefined') {
 			const token = bearer.split(' ')[1];
-			app.jwt.verify(token, (err) => {
+			app.jwt.verify(token, err => {
 				err ? reply.status(401).send('token invalid !') : '';
 			});
 		} else {
@@ -25,10 +25,12 @@ export default async (app, option, next) => {
 			recipient: {
 				id: userId,
 			},
-			sender_action:'mark_seen'
+			sender_action: 'mark_seen',
 		};
 		console.log('Send seen message');
-		const url = `${config.facebookGraphUrl}/${config.pageid}/messages?access_token=${config.pageToken}`;
+		const url = `${config.facebookGraphUrl}/${
+			config.pageid
+		}/messages?access_token=${config.pageToken}`;
 		await axios.post(url, facebookContent);
 	}
 	const dbName = config.dbName;
@@ -37,11 +39,11 @@ export default async (app, option, next) => {
 		channelSecret: config.channelSecret,
 	};
 	const client = new line.Client(configLine);
-  
-	app.register(fastifyJwt, { secret: `${config.secret}`});
 
-	app.post('/api/messenger/receive/', async (req,reply) => {
-		const data =  req.body.data;
+	app.register(fastifyJwt, { secret: `${config.secret}` });
+
+	app.post('/api/messenger/receive/', async(req, reply) => {
+		const data = req.body.data;
 		console.log('[Facebook]');
 		const userId = data.entry[0].messaging[0].sender.id;
 		const incomingMessage = data.entry[0].messaging[0].message;
@@ -55,7 +57,8 @@ export default async (app, option, next) => {
 		if (typeof incomingMessage === 'undefined') {
 			console.log('Receive unknown message');
 			await seenMessage(userId);
-			reply.status(200).send({ repsoneMessage : 'receive unknown message ' });
+			reply.status(200).send({ repsoneMessage: 'receive unknown message ' });
+
 			return;
 		}
 		try {
@@ -63,14 +66,15 @@ export default async (app, option, next) => {
 			await create(app, dbName, 'Logs', logData);
 			// await saveUserData(userId, app, 'facebook');
 			const currentSession = await SessionManager.currentSession(app, userId);
-			if( currentSession !== undefined && currentSession.status !== 'finish' ) {
+			if (currentSession !== undefined && currentSession.status !== 'finish') {
 				console.log('Continues excute workflow');
 				await SessionManager.nextStateWorkflow(app, userId);
-				await SessionManager.sendState(app, userId, 'facebook');	
+				await SessionManager.sendState(app, userId, 'facebook');
 			} else {
 				const keyword = incomingMessage.text;
-				const workflow = await SessionManager.getWorkflowByKeyword(app, keyword);
-				if((workflow && workflow._id) !== undefined){
+				const workflow = await SessionManager.getWorkflowByKeyword(app,
+					keyword);
+				if ((workflow && workflow._id) !== undefined) {
 					console.log('Excute workflow by keyword ', keyword);
 					await SessionManager.startWorkflow(app, userId, workflow._id);
 					await SessionManager.sendState(app, userId, 'facebook');
@@ -78,21 +82,21 @@ export default async (app, option, next) => {
 					await seenMessage(userId);
 				}
 			}
-			reply.status(200).send({ repsoneMessage : 'receive message' });
+			reply.status(200).send({ repsoneMessage: 'receive message' });
 		} catch (error) {
-			reply.status(500).send({ error : error.stack });
+			reply.status(500).send({ error: error.stack });
 			console.log(error.stack);
 		}
 	});
 
-	app.post('/api/messenger/sendmsg/',async (req,reply) => {
+	app.post('/api/messenger/sendmsg/', async(req, reply) => {
 		verifyToken(req, reply);
 		const replyContent = req.body.replycontent;
 		const userId = req.query.userid;
-		if(typeof userId === 'undefined' || userId === '') {
+		if (typeof userId === 'undefined' || userId === '') {
 			return reply.status(401).send('require userid');
 		}
-		console.log('to : ',userId);
+		console.log('to : ', userId);
 		console.log(replyContent);
 		const logData = {
 			userId,
@@ -103,21 +107,23 @@ export default async (app, option, next) => {
 			await create(app, dbName, 'Logs', logData);
 			await saveUserData(client, userId, app);
 			await client.pushMessage(userId, replyContent);
-			reply.status(200).send({ repsoneMessage : `1 Content Sended to ID: ${userId}` });
-		} catch(error) {
-			reply.status(500).send({ error : error.stack });
+			reply
+				.status(200)
+				.send({ repsoneMessage: `1 Content Sended to ID: ${userId}` });
+		} catch (error) {
+			reply.status(500).send({ error: error.stack });
 			console.log(error.stack);
 		}
 	});
-    
-	app.get('/api/messenger/logs/',async (req,reply) => {
+
+	app.get('/api/messenger/logs/', async(req, reply) => {
 		verifyToken(req, reply);
 		const lineid = req.query.userid;
 		let filter = {};
 
-		if(lineid !== undefined) {
+		if (lineid !== undefined) {
 			filter = {
-				userId : lineid,
+				userId: lineid,
 			};
 			console.log('find logs by lineid', lineid);
 		} else {
@@ -125,19 +131,19 @@ export default async (app, option, next) => {
 		}
 
 		try {
-			const logs = await find(app, dbName, 'Logs',filter,{ _id : -1 });
+			const logs = await find(app, dbName, 'Logs', filter, { _id: -1 });
 			reply.send(logs);
 		} catch (error) {
-			reply.status(500).send({ error : error.stack });
+			reply.status(500).send({ error: error.stack });
 			console.log(error.stack);
 		}
-      
 	});
 
-	app.get('/gtoken',async (req,reply) => {
-		reply.jwtSign({'SurpiceMother': 'fucker'},(err, token) => {
-			if(err) console.log(err.stack);
-			return reply.send( err|| {token} );
+	app.get('/gtoken', (req, reply) => {
+		reply.jwtSign({ SurpiceMother: 'fucker' }, (err, token) => {
+			if (err) console.log(err.stack);
+
+			return reply.send(err || { token });
 		});
 	});
 	next();
