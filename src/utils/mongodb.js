@@ -1,6 +1,9 @@
 const find = async (app, dbname, collectionName, filter = {}, sort = {}) => {
 	const col = app.mongo.client.db(dbname).collection(collectionName);
-	const data = await col.find(filter).sort(sort).toArray();
+	const data = await col
+		.find(filter)
+		.sort(sort)
+		.toArray();
 	return data;
 };
 
@@ -16,35 +19,41 @@ const create = async (app, dbname, collectionName, data) => {
 	try {
 		const result = await col.insertOne(insertData);
 		return result;
-	} catch(error) {
+	} catch (error) {
 		throw error;
 	}
 };
 
-const update = async (app, dbname, collectionName, filter = {}, option = {}, data = {}) => {
+const update = async (
+	app,
+	dbname,
+	collectionName,
+	filter = {},
+	option = {},
+	data = {},
+) => {
 	const col = app.mongo.client.db(dbname).collection(collectionName);
 	const now = new Date();
 	const rawData = data;
 	const updateData = {
-		$set : {
-			...rawData 
+		$set: {
+			...rawData,
 		},
 	};
 	const updatedate = {
 		$set: {
-			update_at : now,
-		}
+			update_at: now,
+		},
 	};
 	try {
 		const result = await col.updateOne(filter, updateData, option);
-		await col.updateOne(filter, updatedate, option); 
+		await col.updateOne(filter, updatedate, option);
 		return result;
 	} catch (error) {
-		throw error;   
+		throw error;
 	}
 };
 
 module.exports = find;
 module.exports = create;
 module.exports = update;
-

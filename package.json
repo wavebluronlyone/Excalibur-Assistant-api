@@ -4,7 +4,7 @@
   "description": "a chat engine bot",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch src src/index.js",
+    "start": "nodemon --watch --verbose src src/index.js",
     "heroku": "node src/index.js"
   },
   "engines": {

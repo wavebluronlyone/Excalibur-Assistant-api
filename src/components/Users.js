@@ -16,16 +16,27 @@ const saveUserData = async (userId, app, media = 'line') => {
 			await update(app, dbName, 'Users', { userId }, { upsert: true }, profile);
 
 			return profile;
-		} if (media === 'facebook') {
+		}
+		if (media === 'facebook') {
 			console.log('Update FACEBOOK profile by id ', userId);
-			const profile = await axios.get(`${config.facebookGraphUrl}/${userId}?access_token=${config.pageToken}`+
-      '&fields=name,gender,profile_pic,first_name,last_name,id');
+			const profile = await axios.get(
+				`${config.facebookGraphUrl}/${userId}?access_token=${
+					config.pageToken
+				}` + '&fields=name,gender,profile_pic,first_name,last_name,id',
+			);
 			const updateProfile = {
 				facebook: {
 					...profile.data,
-				}
+				},
 			};
-			await update(app, dbName, 'Users_Facebook', { 'facebook.id': userId }, { upsert: true }, updateProfile);
+			await update(
+				app,
+				dbName,
+				'Users_Facebook',
+				{ 'facebook.id': userId },
+				{ upsert: true },
+				updateProfile,
+			);
 
 			return profile;
 		}
@@ -35,4 +46,3 @@ const saveUserData = async (userId, app, media = 'line') => {
 };
 
 module.exports = saveUserData;
- 

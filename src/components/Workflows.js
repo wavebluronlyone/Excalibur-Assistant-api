@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 const { ObjectId } = require('mongodb');
 const line = require('@line/bot-sdk');
 const axios = require('axios');
@@ -54,20 +55,29 @@ class SessionAndMessageEngine {
 
 		let sessionData = {};
 		const workflow = await this.getWorkflowById(app, workflowId);
-		workflow.states.length <= 1 ? sessionData = {
-			userId,
-			workflowId,
-			currentState: 'end',
-			status: 'finish',
-		} : sessionData = {
-			userId,
-			workflowId,
-			currentState: 'start',
-			status: 'pending',
-		};
+		workflow.states.length <= 1
+			? (sessionData = {
+				userId,
+				workflowId,
+				currentState: 'end',
+				status: 'finish',
+			  })
+			: (sessionData = {
+				userId,
+				workflowId,
+				currentState: 'start',
+				status: 'pending',
+			  });
 
 		try {
-			await update(app, config.dbName, 'Sessions', filter, { upsert: true }, sessionData);
+			await update(
+				app,
+				config.dbName,
+				'Sessions',
+				filter,
+				{ upsert: true },
+				sessionData,
+			);
 		} catch (error) {
 			throw error.stack;
 		}
@@ -83,9 +93,13 @@ class SessionAndMessageEngine {
 		}
 
 		const raw_currentState = Session.currentState;
-		const currentState = workflow.states.filter(state => (state.state_name === raw_currentState));
+		const currentState = workflow.states.filter(
+			state => state.state_name === raw_currentState,
+		);
 		const nextStateName = currentState[0].next_state;
-		const nextState = workflow.states.filter(state => (state.state_name === nextStateName));
+		const nextState = workflow.states.filter(
+			state => state.state_name === nextStateName,
+		);
 		let updateSessionData = {};
 
 		if (nextState[0].state_type !== 'end') {
@@ -100,13 +114,20 @@ class SessionAndMessageEngine {
 			};
 		}
 		try {
-			await update(app, config.dbName, 'Sessions', { userId }, {}, updateSessionData);
+			await update(
+				app,
+				config.dbName,
+				'Sessions',
+				{ userId },
+				{},
+				updateSessionData,
+			);
 		} catch (error) {
-			throw (error.stack);
+			throw error.stack;
 		}
 	}
 
-	async sendState(app, userId, media='line') {
+	async sendState(app, userId, media = 'line') {
 		const Session = await this.currentSession(app, userId);
 		const currentState = Session.currentState;
 		const workflow = await this.getWorkflowById(app, Session.workflowId);
@@ -114,29 +135,31 @@ class SessionAndMessageEngine {
 			channelAccessToken: config.channelAccessToken,
 			channelSecret: config.channelSecret,
 		};
-		const contents = workflow.states.filter(state => currentState === state.state_name);
+		const contents = workflow.states.filter(
+			state => currentState === state.state_name,
+		);
 		try {
-			contents.forEach(async (content) => {
+			contents.forEach(async content => {
 				const logData = {
 					userId,
 					replyMessage: content.reply_content,
 				};
-				if(media === 'line') {
+				if (media === 'line') {
 					const client = new line.Client(configLine);
 					await client.pushMessage(userId, content.reply_content);
 					await create(app, config.dbName, 'Logs', logData);
-				} else if(media === 'facebook') {
-					content.reply_content.forEach( async message => {
+				} else if (media === 'facebook') {
+					content.reply_content.forEach(async message => {
 						let facebookContent = {};
-						if(message.type === 'text') {
+						if (message.type === 'text') {
 							facebookContent = {
 								messaging_type: 'RESPONSE',
 								recipient: {
 									id: userId,
 								},
 								message: {
-									text: message.text
-								}
+									text: message.text,
+								},
 							};
 						} else if (message.type === 'image') {
 							facebookContent = {
@@ -144,11 +167,11 @@ class SessionAndMessageEngine {
 								recipient: {
 									id: userId,
 								},
-								message:{
-									attachment:{
-										type:'image', 
-										payload:{
-											url: message.originalContentUrl, 
+								message: {
+									attachment: {
+										type: 'image',
+										payload: {
+											url: message.originalContentUrl,
 										},
 									},
 								},
@@ -159,10 +182,12 @@ class SessionAndMessageEngine {
 								recipient: {
 									id: userId,
 								},
-								sender_action:'mark_seen'
+								sender_action: 'mark_seen',
 							};
 						}
-						const url = `${config.facebookGraphUrl}/${config.pageid}/messages?access_token=${config.pageToken}`;
+						const url = `${config.facebookGraphUrl}/${
+							config.pageid
+						}/messages?access_token=${config.pageToken}`;
 						await axios.post(url, facebookContent);
 					});
 				}
