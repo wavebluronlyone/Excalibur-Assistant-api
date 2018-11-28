@@ -1,9 +1,11 @@
-version: '3'
+version: '3.5'
 services:
   excalibur-api-node:  
     build: node/
     container_name: excalibur-api-node
     tty: true
+    networks:
+      - api_network_dev
     volumes:
       - ../:/app
     working_dir: /app
@@ -16,3 +18,7 @@ services:
       && yarn run build 
       && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
       && pm2-docker start daemon-app.js --instances 1"
+networks:
+  api_network_dev: 
+    name: api_network_dev
+
