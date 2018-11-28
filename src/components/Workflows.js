@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 const { ObjectId } = require('mongodb');
 const line = require('@line/bot-sdk');
 const axios = require('axios');
