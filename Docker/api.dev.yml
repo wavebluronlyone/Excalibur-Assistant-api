@@ -1,0 +1,27 @@
+version: '3'
+services:
+  excalibur-api-node:  
+    build: /node
+    container_name: excalibur-api-node
+    tty: true
+    volumes:
+      - ../:/app
+    working_dir: /app
+    environment:
+      - NODE_ENV=dev
+    command: >
+      sh -c "yarn --ignore-engines
+      && yarn run build 
+      && pm2 start -f dist/index.js --name="api" --instances 1 --max-memory-restart 150M
+      && pm2-docker start daemon-app.js --instances 1"
+  excalibur-nginx:
+    image: nginx:1.15.6
+    build: nginx/
+    container_name: excalibur-api-nginx
+    links:
+      - excalibur-api-node
+    depends_on:
+      - excalibur-api-node
+    ports:
+      - "8081:8081"
+  

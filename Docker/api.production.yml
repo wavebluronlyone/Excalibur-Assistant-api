@@ -1,7 +1,7 @@
 version: '3'
 services:
   excalibur-api-node:  
-    build: .
+    build: /node
     container_name: excalibur-api-node
     tty: true
     volumes:
@@ -21,7 +21,7 @@ services:
   excalibur-nginx:
     image: nginx:1.15.6
     build: nginx/
-    container_name: excalibur-nginx
+    container_name: excalibur-api-nginx
     links:
       - excalibur-api-node
     depends_on:
