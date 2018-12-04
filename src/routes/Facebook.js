@@ -6,7 +6,7 @@ const { saveUserData } = require('../components/Users');
 const fastifyJwt = require('fastify-jwt');
 const SessionManager = require('../components/Workflows');
 
-module.exports = (app, option, next) => {
+const Facebook = (app, option, next) => {
 	function verifyToken(req, reply) {
 		const bearer = req.headers['authorization'];
 		if (typeof bearer !== 'undefined') {
@@ -67,7 +67,7 @@ module.exports = (app, option, next) => {
 			// await saveUserData(userId, app, 'facebook');
 			const currentSession = await SessionManager.currentSession(app, userId);
 			if (currentSession !== undefined && currentSession.status !== 'finish') {
-				console.log('Continues excute workflow');
+				console.log('Continues execute workflow');
 				await SessionManager.nextStateWorkflow(app, userId);
 				await SessionManager.sendState(app, userId, 'facebook');
 			} else {
@@ -148,3 +148,4 @@ module.exports = (app, option, next) => {
 	});
 	next();
 };
+module.exports = Facebook;
