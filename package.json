@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/wavebluronlyone/Excalibur-Assistant#readme",
   "dependencies": {
-    "@line/bot-sdk": "^6.2.0",
+    "@line/bot-sdk": "^7.0.0",
     "ajv": "^5.0.0",
     "amqplib": "*",
     "axios": "^0.18.0",
