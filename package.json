@@ -30,7 +30,7 @@
     "fastify": "^1.9.0",
     "fastify-jwt": "^0.3.0",
     "fastify-mongodb": "^0.8.2",
-    "fastify-webhook": "^0.2.0",
+    "fastify-webhook": "^2.1.0",
     "moment": "^2.22.2",
     "mongodb": "^3.1.1",
     "qs": "^6.5.2"
